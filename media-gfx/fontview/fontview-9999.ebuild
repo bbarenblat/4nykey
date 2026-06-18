@@ -1,4 +1,4 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -28,7 +28,7 @@ IUSE=""
 
 RDEPEND="
 	dev-libs/fribidi
-	dev-libs/libraqm
+	media-libs/raqm
 	media-libs/freetype:2
 	media-libs/harfbuzz
 	x11-libs/wxGTK:=
