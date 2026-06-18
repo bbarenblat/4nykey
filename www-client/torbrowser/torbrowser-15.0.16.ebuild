@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-140esr-patches-10.tar.xz"
+FIREFOX_PATCHSET="firefox-140esr-patches-12.tar.xz"
 
 LLVM_COMPAT=( 20 21 )
 
@@ -32,9 +32,9 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="140.11.0esr-${MY_PV}-1-build4"
+MY_P="140.12.0esr-${MY_PV}-1-build2"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.6.20.1984"
+MY_NOS="13.6.24.1984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -90,7 +90,7 @@ BDEPEND="${PYTHON_DEPS}
 	app-alternatives/awk
 	app-arch/unzip
 	app-arch/zip
-	>=dev-util/cbindgen-0.27.0
+	>=dev-util/cbindgen-0.29.4
 	net-libs/nodejs
 	virtual/pkgconfig
 	amd64? ( >=dev-lang/nasm-2.14 )
