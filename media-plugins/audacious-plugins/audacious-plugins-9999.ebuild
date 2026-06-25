@@ -48,45 +48,26 @@ LICENSE="BSD-2 BSD CC-BY-SA-4.0 GPL-2+ GPL-3 ISC LGPL-2.1+ MIT public-domain"
 SLOT="0"
 IUSE="
 	aac +alsa ampache bs2b cdda cue ffmpeg flac fluidsynth gme gtk http jack
-	lame libnotify libsamplerate lirc mms modplug +mp3 opengl openmpt opus
+	lame libnotify libsamplerate lirc mms modplug +mp3 mpris opengl openmpt opus
 	pipewire pulseaudio qt6 qtmedia scrobbler sdl sid sndfile soxr streamtuner
 	vorbis wavpack wayland X
 "
-IUSE+=" nls gtk"
+IUSE+=" nls"
 
 REQUIRED_USE="
 	ampache? ( http )
 	streamtuner? ( http )
 "
 
-# The following plugins REQUIRE a GUI build of audacious, because non-GUI
-# builds do NOT install the libaudgui library & headers.
-# Plugins without a configure option:
-#   albumart{,-qt}
-#   blur-scope{,-qt}
-#   delete-files
-#   filebrowser-qt
-#   ladspa
-#   lyrics-{gtk,qt}
-#   playback-history-qt
-#   playlist-manager{,-qt}
-#   search-tool{,-qt}
-#   song-info-qt
-#   spectrum-analyzer
-#   statusicon{,-qt}
-# Plugins with a configure option:
+# Most plugins support GTK/Qt and X/wayland alternatives.
+# These plugins require a specific GUI:
 #   aosd (X+gtk)
 #   ampache (qt6)
-#   glspectrum (X) (handles qtglspectrum if qt6)
-#   gtkui
-#   hotkey (X) (handles qthotkey if qt6)
-#   notify
-#   qtui
-#   streamtuner (qt6)
-#   vumeter{,-qt} (forced)
+#   ladspa (gtk)
+#   skins/Winamp (X)
 BDEPEND="
-	>=dev-util/gdbus-codegen-2.80.5-r1
 	virtual/pkgconfig
+	mpris? ( >=dev-util/gdbus-codegen-2.80.5-r1 )
 	nls? ( dev-util/intltool )
 "
 DEPEND="
@@ -99,12 +80,12 @@ DEPEND="
 	alsa? ( >=media-libs/alsa-lib-1.0.16 )
 	bs2b? ( >=media-libs/libbs2b-3.0.0 )
 	cdda? (
-		>=dev-libs/libcdio-0.70:=
+		>=dev-libs/libcdio-0.90:=
 		dev-libs/libcdio-paranoia:=
 		>=media-libs/libcddb-1.2.1
 	)
 	cue? ( media-libs/libcue:= )
-	ffmpeg? ( >=media-video/ffmpeg-2.8.1:= )
+	ffmpeg? ( >=media-video/ffmpeg-4.2.3:= )
 	flac? ( >=media-libs/flac-1.2.1-r1:= )
 	fluidsynth? ( >=media-sound/fluidsynth-1.0.6:= )
 	gtk? (
@@ -129,7 +110,7 @@ DEPEND="
 	mms? ( >=media-libs/libmms-0.3 )
 	modplug? ( media-libs/libmodplug )
 	mp3? ( >=media-sound/mpg123-base-1.12 )
-	openmpt? ( >=media-libs/libopenmpt-0.2 )
+	openmpt? ( >=media-libs/libopenmpt-0.3 )
 	opus? ( >=media-libs/opusfile-0.4 )
 	pipewire? ( >=media-video/pipewire-0.3.33:= )
 	pulseaudio? ( >=media-libs/libpulse-0.9.5 )
@@ -172,6 +153,16 @@ src_prepare() {
 	fi
 }
 
+_have_gui() {
+	if use gtk || use qt6; then
+		echo true
+		return 0
+	else
+		echo false
+		return 1
+	fi
+}
+
 src_configure() {
 	# defang automagic dependencies
 	use X || append-cppflags -DGENTOO_GTK_HIDE_X11
@@ -179,13 +170,13 @@ src_configure() {
 
 	local emesonargs=(
 		# GUI toolkits
-		$(meson_use gtk)
+		$(meson_use gtk gtk)
+		$(meson_use gtk gtkui)
 		-Dgtk2=false
 		$(meson_use qt6 qt)
-		-Dqt5=false
-		$(meson_use gtk gtkui)
 		$(meson_use qt6 qtui)
-		$(meson_use X skins)
+		-Dqt5=false
+		-Dskins=$(usex X $(_have_gui) false) # Winamp
 
 		# container plugins
 		$(meson_use cue)
@@ -193,6 +184,8 @@ src_configure() {
 		# transport plugins
 		$(meson_use mms)
 		$(meson_use http neon)
+		# default true:
+		# gio
 
 		# input plugins
 		$(meson_use aac)
@@ -209,7 +202,13 @@ src_configure() {
 		$(meson_use sid)
 		$(meson_use sndfile)
 		$(meson_use vorbis)
+		-Dvtx=$(_have_gui)
 		$(meson_use wavpack)
+		# default true:
+		# metronom
+		# psf (zlib)
+		# tonegen
+		# xsf (zlib)
 
 		# output plugins
 		$(meson_use alsa)
@@ -227,26 +226,58 @@ src_configure() {
 		-Dsndio=false
 
 		# general plugins
+		-Dalbumart=$(_have_gui)
 		$(meson_use ampache)
-		$(meson_use X aosd)
+		-Daosd=$(usex X $(usex gtk true false) false)
+		-Ddelete-files=$(_have_gui)
+		-Dfilebrowser=$(_have_gui)
 		$(meson_use X hotkey)
 		$(meson_use lirc)
-		-Dmac-now-playing=false
-		-Dmpris2=true
+		-Dlyrics=$(_have_gui)
+		$(meson_use mpris mpris2)
 		$(meson_use libnotify notify)
+		-Dmac-now-playing=false
+		-Dplayback-history=$(_have_gui)
+		-Dplaylist-manager=$(_have_gui)
 		$(meson_use scrobbler scrobbler2)
-		-Dsongchange=true
+		-Dsearchtool=$(_have_gui)
+		$(meson_use qt6 songinfo)
+		-Dstatusicon=$(_have_gui)
 		$(meson_use streamtuner)
+		# default true:
+		# songchange (glib)
+
+		# playlist plugins
+		# default true:
+		# asx
+		# asx3 (libxml2)
+		# m3u
+		# pls
+		# xspf (glib, libxml2)
 
 		# effect plugins
 		$(meson_use bs2b)
+		$(meson_use gtk ladspa)
 		$(meson_use libsamplerate resample)
 		$(meson_use libsamplerate speedpitch)
 		$(meson_use soxr)
+		# default true:
+		# background-music
+		# bitcrusher
+		# compressor
+		# crossfade
+		# crystalizer
+		# echo
+		# mixer
+		# silence-removal
+		# stereo
+		# voice-removal
 
 		# visualization plugins
+		-Dblurscope=$(_have_gui)
 		$(meson_use opengl gl-spectrum)
-		-Dvumeter=true
+		-Dspectrum-analyzer=$(_have_gui)
+		-Dvumeter=$(_have_gui)
 	)
 	meson_src_configure
 }
@@ -254,19 +285,23 @@ src_configure() {
 src_install() {
 	meson_src_install
 
-	# the skin Winamp2.9 is copyrighted, so revert upstream' commit 367e7a3
-	# see comments at https://www.gnome-look.org/p/1008229 and bug #965338
-	# part of skins-data which depends on gui
-	if use gtk || use qt6; then
+	if _have_gui && use X; then
+		# the skin Winamp2.9 is copyrighted, so revert upstream' commit 367e7a3
+		# see comments at https://www.gnome-look.org/p/1008229 and bug #965338
+		# part of skins-data which depends on X-gui
 		rm -r "${ED}"/usr/share/audacious/Skins/Winamp2.9 || die
-	fi
 
-	# Gentoo_ice Winamp skin installation; bug #109772
-	# The Winamp interface is not supported on Wayland.
-	if use X; then
+		# Gentoo_ice Winamp skin installation; bug #109772
+		# The Winamp interface is not supported on Wayland.
 		insinto /usr/share/audacious/Skins/gentoo_ice
 		doins -r "${WORKDIR}"/gentoo_ice/.
 		docinto gentoo_ice
 		dodoc "${WORKDIR}"/README
+	fi
+}
+
+pkg_postinst() {
+	if ! use X && _have_gui; then
+		einfo "The Winamp interface is not usable yet on Wayland."
 	fi
 }
