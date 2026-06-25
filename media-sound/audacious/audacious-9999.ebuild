@@ -21,7 +21,6 @@ else
 		"
 		S="${WORKDIR}/${PN}-${MY_PV}"
 	fi
-	RESTRICT="primaryuri"
 	KEYWORDS="~amd64"
 fi
 
@@ -32,6 +31,9 @@ LICENSE="BSD-2"
 SLOT="0"
 IUSE="gtk qt6 test"
 IUSE+=" libarchive nls"
+REQUIRED_USE="test? ( qt6 )"
+RESTRICT="!test? ( test )"
+RESTRICT+=" primaryuri"
 
 BDEPEND="
 	>=dev-util/gdbus-codegen-2.80.5-r1
@@ -40,12 +42,12 @@ BDEPEND="
 	nls? ( dev-util/intltool )
 "
 DEPEND="
-	dev-libs/glib:2
+	>=dev-libs/glib-2.36:2
 	virtual/freedesktop-icon-theme
 	gtk? (
 		x11-libs/cairo
 		x11-libs/gdk-pixbuf:2
-		>=x11-libs/gtk+-3.18:3
+		>=x11-libs/gtk+-3.24:3
 		x11-libs/pango
 	)
 	qt6? (
@@ -106,12 +108,4 @@ src_compile() {
 
 src_test() {
 	BUILD_DIR="${WORKDIR}"/${P}-libaudcore_tests-build meson_src_test
-}
-
-pkg_postinst() {
-	if use gtk || use qt6; then
-		ewarn "Audacious without X11/XWayland is unsupported."
-		ewarn "Especially the Winamp interface is not usable yet on Wayland."
-	fi
-	xdg_pkg_postinst
 }
