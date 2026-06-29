@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-151-patches-01.tar.xz"
+FIREFOX_PATCHSET="firefox-151-patches-03.tar.xz"
 
 LLVM_COMPAT=( 21 22 )
 
@@ -88,7 +88,7 @@ BDEPEND="${PYTHON_DEPS}
 	app-alternatives/awk
 	app-arch/unzip
 	app-arch/zip
-	>=dev-util/cbindgen-0.29.1
+	>=dev-util/cbindgen-0.29.4
 	net-libs/nodejs
 	virtual/pkgconfig
 	amd64? ( >=dev-lang/nasm-2.14 )
@@ -424,6 +424,8 @@ src_prepare() {
 
 	# https://github.com/hsivonen/encoding_rs/pull/130
 	eapply --directory=third_party/rust/encoding_rs "${FILESDIR}"/b1baabb.patch
+
+	eapply "${FILESDIR}"/cbindgen0294.diff
 
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user

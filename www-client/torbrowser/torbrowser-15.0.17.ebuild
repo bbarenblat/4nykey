@@ -10,8 +10,10 @@ LLVM_COMPAT=( 20 21 )
 # This will also filter rust versions that don't match LLVM_COMPAT in the non-clang path; this is fine.
 RUST_NEEDS_LLVM=1
 
-# If not building with clang we need at least rust 1.76
+# Minimum version required to build.
+# Max version supported by LLVM_COMPAT.
 RUST_MIN_VER=1.82.0
+RUST_MAX_VER=1.94.1
 
 PYTHON_COMPAT=( python3_{12..14} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
@@ -34,7 +36,7 @@ MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
 MY_P="140.12.0esr-${MY_PV}-1-build2"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.6.24.1984"
+MY_NOS="13.6.25.1984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
