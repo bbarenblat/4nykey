@@ -84,14 +84,6 @@ pkg_pretend() {
 	fi
 }
 
-src_prepare() {
-	sed -e '/Werror/d' -i CMakeLists.txt || die # bug 936466
-
-	cmake_src_prepare
-
-	multilib_copy_sources
-}
-
 multilib_src_configure() {
 	export GO111MODULE=auto
 	local mycmakeargs=(
@@ -103,6 +95,8 @@ multilib_src_configure() {
 		-DWITH_AOM_ENCODER=$(usex aom)
 		-DWITH_DAV1D=$(usex dav1d)
 		-DWITH_EXAMPLES=$(usex tools) # the examples are tools
+		-DWITH_EXAMPLE_HEIF_THUMB=$(usex tools)
+		-DWITH_EXAMPLE_HEIF_VIEW=$(usex tools $(usex gui))
 		-DWITH_FFMPEG_DECODER=$(usex ffmpeg)
 		-DWITH_GDK_PIXBUF=$(usex gdk-pixbuf)
 		-DWITH_OpenH264_DECODER=$(usex openh264)
@@ -131,7 +125,6 @@ multilib_src_configure() {
 	fi
 
 	mycmakeargs+=(
-		-DWITH_EXAMPLE_HEIF_VIEW=$(usex tools $(usex gui))
 		-DENABLE_MULTITHREADING_SUPPORT=$(usex threads)
 		-DENABLE_PARALLEL_TILE_DECODING=$(usex threads)
 		-DWITH_LIBSHARPYUV=$(usex webp)
