@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-151-patches-03.tar.xz"
+FIREFOX_PATCHSET="firefox-152-patches-03.tar.xz"
 
 LLVM_COMPAT=( 21 22 )
 
@@ -36,9 +36,9 @@ else
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
-MY_P="151.0a1-${MY_PV}-1-build4"
+MY_P="152.0a1-${MY_PV}-2-build3"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.6.19.90101984"
+MY_NOS="13.6.25.90301984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
@@ -108,7 +108,7 @@ COMMON_DEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
 	dev-libs/glib:2
 	dev-libs/libffi:=
-	>=dev-libs/nss-3.123.1
+	>=dev-libs/nss-3.124
 	>=dev-libs/nspr-4.39
 	media-libs/alsa-lib
 	media-libs/fontconfig
@@ -415,15 +415,11 @@ src_prepare() {
 	# Workaround for bgo#915651 and bmo#1988166 on musl
 	if use elibc_glibc ; then
 		rm -v "${WORKDIR}"/firefox-patches/*bgo-748849-RUST_TARGET_override.patch || die
-		rm -v "${WORKDIR}"/firefox-patches/*bmo-1988166-musl-remove-nonexisting-system-header-req.patch || die
 		rm -v "${WORKDIR}"/firefox-patches/*bgo-967694-musl-prctrl-exception-on-musl.patch || die
 	fi
 
 	use vanilla || \
 	eapply "${WORKDIR}/firefox-patches"
-
-	# https://github.com/hsivonen/encoding_rs/pull/130
-	eapply --directory=third_party/rust/encoding_rs "${FILESDIR}"/b1baabb.patch
 
 	eapply "${FILESDIR}"/cbindgen0294.diff
 
