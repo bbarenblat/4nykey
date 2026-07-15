@@ -34,9 +34,9 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="140.12.0esr-${MY_PV}-1-build2"
+MY_P="140.12.0esr-${MY_PV}-1-build3"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.6.25.1984"
+MY_NOS="13.6.30.1984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -414,6 +414,7 @@ src_prepare() {
 	if [[ ${use_lto} == "yes" ]]; then
 		rm -v "${WORKDIR}"/firefox-patches/*-LTO-Only-enable-LTO-*.patch || die
 	fi
+	rm -f "${WORKDIR}"/firefox-patches/0027-bmo-2046162-remove-some-redundant-pub-qualifiers-cbindgen-0.29.4.patch
 
 	# Workaround for bgo#915651 on musl
 	if use elibc_glibc ; then
