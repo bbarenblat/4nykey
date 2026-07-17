@@ -29,9 +29,9 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/fonttools-4.38[${PYTHON_USEDEP}]
-	>=dev-python/pyparsing-3.0.9[${PYTHON_USEDEP}]
-	>=dev-python/ufoLib2-0.13.1[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.63[${PYTHON_USEDEP}]
+	>=dev-python/pyparsing-3.3.2[${PYTHON_USEDEP}]
+	>=dev-python/ufoLib2-0.18.1[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}

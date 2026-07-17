@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} )
-DISTUTILS_USE_PEP517=poetry
+DISTUTILS_USE_PEP517=hatchling
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -34,4 +34,15 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
+BDEPEND="
+	test? (
+		dev-python/mypy[${PYTHON_USEDEP}]
+		dev-python/ufo2ft[${PYTHON_USEDEP}]
+		dev-python/ufoLib2[${PYTHON_USEDEP}]
+	)
+"
 distutils_enable_tests pytest
+
+pkg_setup() {
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+}
