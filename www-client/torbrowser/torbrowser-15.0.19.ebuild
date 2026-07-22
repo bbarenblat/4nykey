@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-140esr-patches-12.tar.xz"
+FIREFOX_PATCHSET="firefox-140esr-patches-13.tar.xz"
 
 LLVM_COMPAT=( 20 21 )
 
@@ -34,9 +34,9 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="140.12.0esr-${MY_PV}-1-build3"
+MY_P="140.13.0esr-${MY_PV}-1-build2"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.6.30.1984"
+MY_NOS="13.6.31.1984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
