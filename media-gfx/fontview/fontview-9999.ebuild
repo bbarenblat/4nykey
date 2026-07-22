@@ -1,9 +1,10 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
+WX_GTK_VER="3.2-gtk3"
 
-inherit toolchain-funcs
+inherit toolchain-funcs wxwidgets
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
@@ -30,8 +31,8 @@ RDEPEND="
 	dev-libs/fribidi
 	media-libs/raqm
 	media-libs/freetype:2
-	media-libs/harfbuzz
-	x11-libs/wxGTK:=
+	media-libs/harfbuzz:=
+	x11-libs/wxGTK:${WX_GTK_VER}=
 "
 DEPEND="
 	${RDEPEND}
@@ -40,15 +41,8 @@ DEPEND="
 "
 PATCHES=( "${FILESDIR}"/cstdint.diff )
 
-pkg_setup() {
-	local _w=( 3 3.0-gtk3 )
-	has_version x11-libs/wxGTK:3.2 && _w=( 3 3.2 )
-	_w="gtk${_w[0]}-unicode-${_w[1]}"
-	WX_CONFIG="${EPREFIX}/usr/$(get_libdir)/wx/config/${_w}"
-	einfo "Using wxWidgets:            ${_w}"
-}
-
 src_prepare() {
+	setup-wxwidgets
 	default
 	sed \
 		-e '/\(freetype\|fribidi\|harfbuzz\|raqm\|wxWidgets\|ucdn\)/d' \
