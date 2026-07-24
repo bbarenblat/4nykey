@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-152-patches-03.tar.xz"
+FIREFOX_PATCHSET="firefox-153-patches-01.tar.xz"
 
 LLVM_COMPAT=( 21 22 )
 
@@ -36,9 +36,9 @@ else
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
-MY_P="152.0a1-${MY_PV}-2-build3"
+MY_P="153.0esr-${MY_PV}-1-build2"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.6.25.90301984"
+MY_NOS="13.6.30.90201984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
@@ -421,8 +421,6 @@ src_prepare() {
 	use vanilla || \
 	eapply "${WORKDIR}/firefox-patches"
 
-	eapply "${FILESDIR}"/cbindgen0294.diff
-
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user
 
@@ -748,7 +746,7 @@ src_configure() {
 		# Avoid compressing just-built instrumented Firefox with
 		# high levels of compression. Just use tar as a container
 		# to save >=10 minutes.
-		export MOZ_PKG_FORMAT=tar
+		export MOZ_PKG_FORMAT=TAR
 
 		if use clang ; then
 			# Used in build/pgo/profileserver.py
