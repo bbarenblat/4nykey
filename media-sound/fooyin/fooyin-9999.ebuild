@@ -24,7 +24,7 @@ HOMEPAGE="https://www.fooyin.org"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="alsa archive gme loudness openmpt pipewire nls pch sanitize sdl sndfile soundtouch soxr test"
+IUSE="alsa archive gme loudness nls openmpt pipewire pch projectm sanitize sdl sndfile soundtouch soxr test"
 REQUIRED_USE="
 	|| ( alsa pipewire sdl )
 "
@@ -44,6 +44,7 @@ RDEPEND="
 	loudness? ( media-libs/libebur128:= )
 	openmpt? ( media-libs/libopenmpt )
 	pipewire? ( media-video/pipewire:= )
+	projectm? ( media-libs/libprojectm:4 )
 	sdl? ( media-libs/libsdl2 )
 	sndfile? ( media-libs/libsndfile )
 	soundtouch? ( media-libs/libsoundtouch:= )

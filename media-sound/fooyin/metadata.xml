@@ -10,6 +10,7 @@
 		<flag name="loudness">Support loudness normalisation according to the EBU R128 standard using <pkg>media-libs/libebur128</pkg></flag>
 		<flag name="openmpt">Build the OpenMPT input plugin using <pkg>media-libs/libopenmpt</pkg></flag>
 		<flag name="pipewire">Enable sound support via native PipeWire backend</flag>
+		<flag name="projectm">Enable the projectM visualization plugin</flag>
 		<flag name="sanitize">Enable AddressSanitizer</flag>
 		<flag name="soundtouch">Enable SoundTouch DSP plugin</flag>
 		<flag name="soxr">Enable SoX resampler DSP plugin</flag>
