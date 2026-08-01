@@ -25,7 +25,7 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="
 apfs btrfs +e2fs exfat f2fs fat fuse hfs minix ncurses nilfs2 ntfs
-reiserfs static xfs
+reiserfs static test xfs
 "
 
 RDEPEND="
@@ -34,6 +34,7 @@ RDEPEND="
 	e2fs? ( sys-fs/e2fsprogs )
 	btrfs? ( sys-apps/util-linux )
 	fuse? ( sys-fs/fuse:0 )
+	hfs? ( sys-fs/diskdev_cmds )
 	ncurses? ( sys-libs/ncurses:0 )
 	nilfs2? ( sys-fs/nilfs-utils )
 	ntfs? ( sys-fs/ntfs3g:= )
@@ -72,6 +73,7 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
+		$(use_enable test fs-test)
 		$(use_enable e2fs extfs)
 		$(use_enable apfs)
 		$(use_enable btrfs)
