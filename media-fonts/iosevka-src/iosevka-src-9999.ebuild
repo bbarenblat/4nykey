@@ -93,7 +93,7 @@ src_prepare() {
 
 src_compile() {
 	local -x MAKE="npm run build" MAKEOPTS="--verbose --"
-	local _n="${MY_PN}" _s _v=() _t=()
+	local _n="${MY_PN^}" _s _v=() _t=()
 
 	if use font_types_ttc; then
 
@@ -106,7 +106,7 @@ src_compile() {
 		_v=( ${_v[@]/term} )
 		for _s in ${_v[@]}; do
 			if use font_variants_${_s}; then
-				_t+=( ${_n}-${_s} )
+				_t+=( ${_n}${_s^^} )
 			fi
 		done
 		if use font_variants_slab && use font_variants_curly; then
@@ -116,11 +116,11 @@ src_compile() {
 
 	else
 
-		local _v="ttf$(usex autohint '' '-unhinted')"
+		local _v="TTF$(usex autohint '' '-Unhinted')"
 
 		for _s in ${FONT_VARIANTS[@]}; do
 				_s=${_s#default}
-				_t+=( ${_n}-${_s} )
+				_t+=( ${_n}${_s^^} )
 		done
 		if use font_variants_slab; then
 			use font_variants_fixed && _t+=( ${_n}-fixed-slab )
@@ -137,7 +137,7 @@ src_compile() {
 		fi
 
 		_t=( ${_t[@]/%-} )
-		emake "${_t[@]/#/${_v}::}"
+		emake "${_t[@]/#/ttf::}"
 
 		FONT_S=( ${_t[@]/#/dist/} )
 		FONT_S=( ${FONT_S[@]/%//${_v}} )
