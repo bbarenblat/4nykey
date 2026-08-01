@@ -11,12 +11,24 @@ SRC_URI="
 	test? (
 		${SRC_URI}10b400_A_Bytedance_2.zip
 		${SRC_URI}10b400_B_Bytedance_2.zip
+		${SRC_URI}10b422_A_Sony_5.zip
+		${SRC_URI}10b422_B_Sony_5.zip
+		${SRC_URI}10b422_C_Sony_5.zip
+		${SRC_URI}10b422_D_Sony_5.zip
+		${SRC_URI}10b422_E_Sony_5.zip
+		${SRC_URI}10b422_F_Sony_5.zip
 		${SRC_URI}10b444_A_Kwai_3.zip
 		${SRC_URI}10b444_B_Kwai_3.zip
 		${SRC_URI}8b400_A_Bytedance_2.zip
 		${SRC_URI}8b400_B_Bytedance_2.zip
 		${SRC_URI}8b420_A_Bytedance_2.zip
 		${SRC_URI}8b420_B_Bytedance_2.zip
+		${SRC_URI}8b422_A_Sony_5.zip
+		${SRC_URI}8b422_B_Sony_5.zip
+		${SRC_URI}8b422_C_Sony_5.zip
+		${SRC_URI}8b422_D_Sony_5.zip
+		${SRC_URI}8b422_E_Sony_5.zip
+		${SRC_URI}8b422_F_Sony_5.zip
 		${SRC_URI}ACTPIC_A_Huawei_3.zip
 		${SRC_URI}ACTPIC_B_Huawei_3.zip
 		${SRC_URI}ACTPIC_C_Huawei_3.zip

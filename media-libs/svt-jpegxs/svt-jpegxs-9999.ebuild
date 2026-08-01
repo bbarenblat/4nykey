@@ -42,3 +42,7 @@ src_configure() {
 	)
 	cmake_src_configure
 }
+
+src_test() {
+	BUILD_DIR="${BUILD_DIR}/tests/UnitTests" cmake_src_test
+}
