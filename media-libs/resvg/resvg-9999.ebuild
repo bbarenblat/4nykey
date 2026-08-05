@@ -94,15 +94,8 @@ RDEPEND="
 "
 
 src_prepare() {
-	sed -e "s:/target/:&$(rust_abi)/:" -i tools/viewsvg/viewsvg.pro
 	sed -e 's%"tests/compile-fail/.gitignore":"[^,]\+",%%' \
 		-i vendor/bitflags-1.3.2/.cargo-checksum.json
-	sed \
-		-e 's%"examples/wasm/.gitignore":"[^,]\+",%%' \
-		-e 's%"testing-tools/font-view/.gitignore":"[^,]\+",%%' \
-		-i vendor/ttf-parser/.cargo-checksum.json
-	sed -e 's%"scripts/.gitignore":"[^,]\+",%%' \
-		-i vendor/rustybuzz/.cargo-checksum.json
 	default
 }
 
