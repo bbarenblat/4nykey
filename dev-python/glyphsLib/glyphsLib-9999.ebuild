@@ -28,9 +28,9 @@ LICENSE="Apache-2.0 MIT"
 SLOT="0"
 
 RDEPEND="
-	>=dev-python/fonttools-4.61.1[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.63[ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-python/ufoLib2-0.18.1[${PYTHON_USEDEP}]
-	>=dev-python/openstep-plist-0.5.1[${PYTHON_USEDEP}]
+	>=dev-python/openstep-plist-0.5.2[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
