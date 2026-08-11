@@ -39,7 +39,10 @@ RDEPEND="
 	nilfs2? ( sys-fs/nilfs-utils )
 	ntfs? ( sys-fs/ntfs3g:= )
 	reiserfs? ( sys-fs/progsreiserfs )
-	xfs? ( sys-apps/util-linux )
+	xfs? (
+		sys-apps/util-linux
+		dev-libs/userspace-rcu
+	)
 	static? (
 		dev-libs/openssl:*[static-libs]
 		e2fs? (
